@@ -89,9 +89,16 @@ gen_dane$`2024` <- as.numeric(gen_dane$`2024`)
 (war_2024 <- var(gen_dane$`2024`))
 
 
-##
+## Skośność
+install.packages("e1071")
+library(e1071)
+(skosnosc_2014 <- round(skewness(gen_dane$`2014`), 3))
+(skosnosc_2024 <- round(skewness(gen_dane$`2024`), 3))
 
 
+## Dominanta
+(dominanta_2014 <- as.numeric(names(which.max(table(gen_dane$`2014`)))))
+(dominanta_2024 <- as.numeric(names(which.max(table(gen_dane$`2024`)))))
 
 
 # Wykresy
