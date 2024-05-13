@@ -101,6 +101,10 @@ library(e1071)
 (dominanta_2024 <- as.numeric(names(which.max(table(gen_dane$`2024`)))))
 
 
+## Kurtoza
+kurtoza_2014 <- kurtosis(gen_dane$`2014`)
+kurtoza_2014 <- kurtosis(gen_dane$`2024`)
+
 # Wykresy
 
 library(ggplot2)
@@ -110,8 +114,14 @@ library(ggplot2)
 boxplot(gen_dane$`2014`, main = "Wykres pudełkowy ilości osób bezrobotnych",
         ylab = "Ilość osób bezrobotnych uprzednio pracujących")
 
+
 ## histogram
 
+ggplot(gen_dane, aes(x=`2014`)) +
+  geom_histogram( binwidth=1000,
+                 color="darkblue", fill="lightblue") +
+  labs(title="Histogram osób bezrobotnych",x="Ilość osób", y="Ilość powiatów")
 
 
 ##
+
