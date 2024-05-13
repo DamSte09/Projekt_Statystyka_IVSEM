@@ -105,3 +105,13 @@ library(e1071)
 
 library(ggplot2)
 
+## Wykres pudełkowy
+
+boxplot(gen_dane$`2014`, main = "Wykres pudełkowy ilości osób bezrobotnych",
+        ylab = "Ilość osób bezrobotnych uprzednio pracujących")
+
+## histogram
+
+
+
+##
