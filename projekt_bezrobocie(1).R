@@ -115,7 +115,7 @@ boxplot(gen_dane$`2014`, main = "Wykres pudełkowy ilości osób bezrobotnych",
         ylab = "Ilość osób bezrobotnych uprzednio pracujących")
 
 
-## histogram
+## Histogram
 
 ggplot(gen_dane, aes(x=`2014`)) +
   geom_histogram( binwidth=1000,
@@ -123,5 +123,18 @@ ggplot(gen_dane, aes(x=`2014`)) +
   labs(title="Histogram osób bezrobotnych",x="Ilość osób", y="Ilość powiatów")
 
 
+## Wykres dominanty
+
+ggplot(gen_dane, aes(x = `2014`)) +
+  stat_ecdf(geom = "step", color = "blue") +
+  labs(title = "Wykres dystrybuanty",x = "Ilość ludzi bezrobotnych", y = "Dystrybuanta") +
+  theme_minimal()
+
+
 ##
 
+dane <- rnorm(100)
+
+# Utworzenie wykresu kwantyl-kwantyl
+qq <- qqnorm(gen_dane$`2014`, main = "Wykres kwantyl-kwantyl", xlab = "Teoretyczne kwantyle", ylab = "Obserwowane kwantyle")
+qqline(dane, col = "blue")
