@@ -153,16 +153,28 @@ qqline(dane, col = "blue")
 
 # Hipotezy
 
+shapiro.test(gen_dane$`2014`)
+shapiro.test(gen_dane$`2024`)
+
+## Hipoteza o średnich
+
 ## Hipoteza zerowa
 ### Średnia ludzi bezrobotnych nie zmieniła się
 
+## Hipoteza alternatywna
+### średnia ludzi bezrobotnych zmniejszyła się
+
 # Test t-Studenta dla dwóch próbek niezależnych
-t_test2 <- t.test(gen_dane$`2014`, gen_dane$`2024`, paired = F)
+t_test2 <- t.test(gen_dane$`2014`, gen_dane$`2024`, paired = F, alternative = "two.sided")
 print(t_test2)
 t_test2$p.value
 t_test2$
 round(t_test2$conf.int,2)
-## Hipoteza alternatywna
-### średnia ludzi bezrobotnych zmniejszyła się
 
-##sa rozne
+# p value jest mniejsze niz 0,05 więc hipoteza zerowa jest nieprawdziwa
+
+
+wilc<-wilcox.test(gen_dane$`2014`, gen_dane$`2024`)
+print(wilc)
+wilc$p.value
+
