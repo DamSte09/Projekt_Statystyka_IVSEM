@@ -102,17 +102,27 @@ library(e1071)
 
 
 ## Kurtoza
-kurtoza_2014 <- kurtosis(gen_dane$`2014`)
-kurtoza_2014 <- kurtosis(gen_dane$`2024`)
+(kurtoza_2014 <- kurtosis(gen_dane$`2014`))
+(kurtoza_2014 <- kurtosis(gen_dane$`2024`))
+
 
 # Wykresy
 
 library(ggplot2)
 
+
 ## Wykres pudełkowy
 
-boxplot(gen_dane$`2014`, main = "Wykres pudełkowy ilości osób bezrobotnych",
-        ylab = "Ilość osób bezrobotnych uprzednio pracujących")
+#install.packages("reshape2")
+library(reshape2)
+gen_dane_long <- melt(gen_dane, variable.name = 'Rok', value.name = 'Bezrobotni')
+View(gen_dane_long)
+
+ggplot(gen_dane_long, aes(x = Rok, y = Bezrobotni, fill = Rok)) +
+  geom_boxplot() +
+  labs(title = "Wykres pudełkowy ilości osób bezrobotnych",
+       y = "Ilość osób bezrobotnych uprzednio pracujących") +
+  theme_minimal()
 
 
 ## Histogram
@@ -123,10 +133,11 @@ ggplot(gen_dane, aes(x=`2014`)) +
   labs(title="Histogram osób bezrobotnych",x="Ilość osób", y="Ilość powiatów")
 
 
-## Wykres dominanty
+## Wykres dystrybuanty
 
-ggplot(gen_dane, aes(x = `2014`)) +
-  stat_ecdf(geom = "step", color = "blue") +
+ggplot(gen_dane) +
+  stat_ecdf(aes(x = `2014`), geom = "step", color = "red") +
+  stat_ecdf(aes(x = `2024`), geom = "step", color = "blue") +
   labs(title = "Wykres dystrybuanty",x = "Ilość ludzi bezrobotnych", y = "Dystrybuanta") +
   theme_minimal()
 
@@ -138,3 +149,20 @@ dane <- rnorm(100)
 # Utworzenie wykresu kwantyl-kwantyl
 qq <- qqnorm(gen_dane$`2014`, main = "Wykres kwantyl-kwantyl", xlab = "Teoretyczne kwantyle", ylab = "Obserwowane kwantyle")
 qqline(dane, col = "blue")
+
+
+# Hipotezy
+
+## Hipoteza zerowa
+### Średnia ludzi bezrobotnych nie zmieniła się
+
+# Test t-Studenta dla dwóch próbek niezależnych
+t_test2 <- t.test(gen_dane$`2014`, gen_dane$`2024`, paired = F)
+print(t_test2)
+t_test2$p.value
+t_test2$
+round(t_test2$conf.int,2)
+## Hipoteza alternatywna
+### średnia ludzi bezrobotnych zmniejszyła się
+
+##sa rozne
