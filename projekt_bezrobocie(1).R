@@ -17,7 +17,8 @@ dane <- dane %>% slice(-c(2,4))
 dane_styczen <- dane[,2:16]
 View(dane_styczen)
 
-h1 <- c(as.character(dane_styczen[1,1]), as.character(dane_styczen[2,2:length(dane_styczen[2,])])) 
+h1 <- c(as.character(dane_styczen[1,1]),
+        as.character(dane_styczen[2,2:length(dane_styczen[2,])])) 
 h1
 dane_styczen <- dane_styczen %>% slice(-c(1:2))
 colnames(dane_styczen) <- h1
@@ -139,7 +140,8 @@ ggplot(gen_dane, aes(x=`2014`)) +
 ggplot(gen_dane) +
   stat_ecdf(aes(x = `2014`), geom = "step", color = "red") +
   stat_ecdf(aes(x = `2024`), geom = "step", color = "blue") +
-  labs(title = "Wykres dystrybuanty",x = "Ilość ludzi bezrobotnych", y = "Dystrybuanta") +
+  labs(title = "Wykres dystrybuanty",
+       x = "Ilość ludzi bezrobotnych", y = "Dystrybuanta") +
   theme_minimal()
 
 
@@ -150,30 +152,36 @@ qq <- qqnorm(gen_dane$`2014`, main = "Wykres kwantyl-kwantyl", xlab = "Teoretycz
 qqline(dane, col = "blue")
 
 
+
 # Hipotezy
 
-shapiro.test(gen_dane$`2014`)
-shapiro.test(gen_dane$`2024`)
+## Sprawdzenie rozkładu czy jest normalny
+roznica <- gen_dane$`2024` - gen_dane$`2014`
 
-## Hipoteza o średnich
+shapiro.test(roznica)
+## różnica danych  nie należy do rozkladu normalnego
+
+
+# Hipoteza o medianie (sparowane, te same powiaty)
 
 ## Hipoteza zerowa
-### Średnia ludzi bezrobotnych nie zmieniła się
+### Mediana ludzi bezrobotnych nie zmieniła się
 
 ## Hipoteza alternatywna
-### średnia ludzi bezrobotnych zmniejszyła się
+### Mediana ludzi bezrobotnych zmniejszyła się
 
-# Test t-Studenta dla dwóch próbek niezależnych
-t_test2 <- t.test(gen_dane$`2014`, gen_dane$`2024`, paired = F, alternative = "two.sided")
-print(t_test2)
-t_test2$p.value
-t_test2$
-round(t_test2$conf.int,2)
+wilc<-wilcox.test(gen_dane$`2014`, gen_dane$`2024`, paired = T)
+print(wilc)
+wilc$p.value
 
 # p value jest mniejsze niz 0,05 więc hipoteza zerowa jest nieprawdziwa
 
 
-wilc<-wilcox.test(gen_dane$`2014`, gen_dane$`2024`)
-print(wilc)
-wilc$p.value
+# Hipoteza o medianie (sparowane, te same powiaty)
+
+## Hipoteza zerowa
+### Mediana ludzi bezrobotnych nie zmieniła się
+
+## Hipoteza alternatywna
+### Mediana ludzi bezrobotnych zmniejszyła się
 
