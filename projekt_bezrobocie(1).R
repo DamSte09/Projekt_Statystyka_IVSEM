@@ -45,6 +45,10 @@ gen_dane$`2024` <- as.numeric(gen_dane$`2024`)
 (srednia_2014 <- mean(gen_dane$`2014`)) 
 (srednia_2024 <- mean(gen_dane$`2024`))
 
+## wariancja
+
+(war_2014 <- var(gen_dane$`2014`))
+(war_2024 <- var(gen_dane$`2024`))
 
 ## odchylenie standardowe
 
@@ -83,10 +87,6 @@ gen_dane$`2024` <- as.numeric(gen_dane$`2024`)
 (rozstep_2014 <- max_values[1] - min_values[1])
 (rozstep_2024 <- max_values[2]- min_values[2])
 
-## wariancja
-
-(war_2014 <- var(gen_dane$`2014`))
-(war_2024 <- var(gen_dane$`2024`))
 
 
 ## Skośność
@@ -130,7 +130,8 @@ ggplot(gen_dane_long, aes(x = Rok, y = Bezrobotni, fill = Rok)) +
 ggplot(gen_dane, aes(x=`2014`)) +
   geom_histogram( binwidth=1000,
                  color="darkblue", fill="lightblue") +
-  labs(title="Histogram osób bezrobotnych",x="Ilość osób", y="Ilość powiatów")
+  labs(title="Histogram osób bezrobotnych(przedział 1000 osób)",
+       x="Ilość osób", y="Ilość powiatów")
 
 
 ## Wykres dystrybuanty
@@ -142,9 +143,7 @@ ggplot(gen_dane) +
   theme_minimal()
 
 
-##
-
-dane <- rnorm(100)
+## Wykres kwantyl - kwantyl
 
 # Utworzenie wykresu kwantyl-kwantyl
 qq <- qqnorm(gen_dane$`2014`, main = "Wykres kwantyl-kwantyl", xlab = "Teoretyczne kwantyle", ylab = "Obserwowane kwantyle")
