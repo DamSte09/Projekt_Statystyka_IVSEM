@@ -177,11 +177,17 @@ wilc$p.value
 # p value jest mniejsze niz 0,05 więc hipoteza zerowa jest nieprawdziwa
 
 
-# Hipoteza o medianie (sparowane, te same powiaty)
+
+# Hipoteza o sredniej (sparowane, te same powiaty)
 
 ## Hipoteza zerowa
-### Mediana ludzi bezrobotnych nie zmieniła się
+### srednias ludzi bezrobotnych nie zmieniła się
 
 ## Hipoteza alternatywna
-### Mediana ludzi bezrobotnych zmniejszyła się
+### srednia ludzi bezrobotnych zmieniła się
 
+test_t <- t.test(gen_dane$`2014`, gen_dane$`2024`, paired = TRUE)
+print(test_t)
+test_t$p.value
+
+# p value jest mniejsze niz 0,05 więc hipoteza zerowa jest nieprawdziwa
