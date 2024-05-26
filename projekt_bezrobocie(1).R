@@ -11,11 +11,9 @@ View(dane)
 library(dplyr)
 dane <- dane %>% slice(-c(2,4))
 
-
-# tworzenie tabeli tylko dla stycznia
+# Tworzenie tabeli tylko ze stycznia
 
 dane_styczen <- dane[,2:16]
-View(dane_styczen)
 
 h1 <- c(as.character(dane_styczen[1,1]),
         as.character(dane_styczen[2,2:length(dane_styczen[2,])])) 
@@ -25,18 +23,17 @@ colnames(dane_styczen) <- h1
 
 View(dane_styczen)
 
-
-# chcemy porownac tylko 2014 i 2024
+# Chcemy tylko 2014 i 2024
 
 gen_dane <- dane_styczen[c(1, 5, 15) ]
-View(gen_dane)
 
-
-#zamiana na typ liczbowy
+# Zamiana na typ liczbowy
 
 (typeof(gen_dane$`2014`))
 gen_dane$`2014` <- as.numeric(gen_dane$`2014`)
 gen_dane$`2024` <- as.numeric(gen_dane$`2024`)
+
+View(gen_dane)
 
 
 # obliczenia parametrow
@@ -131,18 +128,20 @@ ggplot(gen_dane_long, aes(x = Rok, y = Bezrobotni, fill = Rok)) +
 ggplot(gen_dane, aes(x=`2014`)) +
   geom_histogram( binwidth=1000,
                  color="darkblue", fill="lightblue") +
-  labs(title="Histogram osób bezrobotnych(przedział 1000 osób)",
-       x="Ilość osób", y="Ilość powiatów")
+  labs(title="Histogram osób bezrobotnych(przedział 1000 osób) w 2014 roku",
+       x="Ilość osób", y="Ilość powiatów") 
 
 
 ## Wykres dystrybuanty
 
-ggplot(gen_dane) +
-  stat_ecdf(aes(x = `2014`), geom = "step", color = "red") +
-  stat_ecdf(aes(x = `2024`), geom = "step", color = "blue") +
+ggplot(gen_dane_long, aes(x = Bezrobotni, color = Rok)) +
+  stat_ecdf() +
   labs(title = "Wykres dystrybuanty",
-       x = "Ilość ludzi bezrobotnych", y = "Dystrybuanta") +
-  theme_minimal()
+       x = "Ilość ludzi bezrobotnych",
+       y = "Dystrybuanta",
+       color = "Rok") +  # Label for legend
+  theme_minimal() +
+  theme(legend.position = "top")  # Optional: to position the legend at the top
 
 
 ## Wykres kwantyl - kwantyl
@@ -169,13 +168,13 @@ shapiro.test(roznica)
 
 ## Hipoteza alternatywna
 ### Mediana ludzi bezrobotnych zmniejszyła się
+test_levene <- leveneTest(liczba_bezrobotnych ~ rok, data = data)
 
 wilc<-wilcox.test(gen_dane$`2014`, gen_dane$`2024`, paired = T)
 print(wilc)
 wilc$p.value
 
 # p value jest mniejsze niz 0,05 więc hipoteza zerowa jest nieprawdziwa
-
 
 
 # Hipoteza o sredniej (sparowane, te same powiaty)
