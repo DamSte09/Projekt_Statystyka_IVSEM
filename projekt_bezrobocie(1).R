@@ -135,46 +135,47 @@ ggplot(gen_dane, aes(x=`2014`)) +
 ## Wykres dystrybuanty
 
 ggplot(gen_dane_long, aes(x = Bezrobotni, color = Rok)) +
-  stat_ecdf() +
+  stat_ecdf(size = 1) +
   labs(title = "Wykres dystrybuanty",
        x = "Ilość ludzi bezrobotnych",
        y = "Dystrybuanta",
-       color = "Rok") +  # Label for legend
+       color = "Rok") +  
   theme_minimal() +
-  theme(legend.position = "top")  # Optional: to position the legend at the top
+  theme(legend.position = "right")  
 
 
 ## Wykres kwantyl - kwantyl
 
-# Utworzenie wykresu kwantyl-kwantyl
-qq <- qqnorm(gen_dane$`2014`, main = "Wykres kwantyl-kwantyl", xlab = "Teoretyczne kwantyle", ylab = "Obserwowane kwantyle")
-qqline(dane, col = "blue")
+qqplot(gen_dane$`2014`, gen_dane$`2024`,
+       main = "Wykres kwantyl-kwantyl dla 2014 vs 2024", 
+       xlab = "kwantyle roku 2014", ylab = "kwantyle roku 2024")
 
+# Dodanie linii referencyjnej
+abline(0, 1, col = "red")
 
 
 # Hipotezy
 
-## Sprawdzenie rozkładu czy jest normalny
-roznica <- gen_dane$`2024` - gen_dane$`2014`
 
-shapiro.test(roznica)
-## różnica danych  nie należy do rozkladu normalnego
-
-
-# Hipoteza o medianie (sparowane, te same powiaty)
+# Hipoteza o rozkladzie 
 
 ## Hipoteza zerowa
-### Mediana ludzi bezrobotnych nie zmieniła się
+### Dane pochodzą z rozkładu normalnego
 
 ## Hipoteza alternatywna
-### Mediana ludzi bezrobotnych zmniejszyła się
-test_levene <- leveneTest(liczba_bezrobotnych ~ rok, data = data)
+### Dane nie pochodzą z rozkładu normalnego
 
-wilc<-wilcox.test(gen_dane$`2014`, gen_dane$`2024`, paired = T)
-print(wilc)
-wilc$p.value
+shapiro_test_2014 <- shapiro.test(gen_dane$`2014`)
+print(shapiro_test_2014)
+shapiro_test_2014$p.value
 
-# p value jest mniejsze niz 0,05 więc hipoteza zerowa jest nieprawdziwa
+shapiro_test_2024 <- shapiro.test(gen_dane$`2024`)
+print(shapiro_test_2024)
+shapiro_test_2024$p.value
+
+
+# p value jest mniejsze niz 0,05 więc hipoteza zerowa zostaje odrzucona
+
 
 
 # Hipoteza o sredniej (sparowane, te same powiaty)
@@ -185,8 +186,13 @@ wilc$p.value
 ## Hipoteza alternatywna
 ### srednia ludzi bezrobotnych zmieniła się
 
-test_t <- t.test(gen_dane$`2014`, gen_dane$`2024`, paired = TRUE)
-print(test_t)
-test_t$p.value
+wilc <- wilcox.test(gen_dane$`2014`, gen_dane$`2024`,
+                    paired = TRUE)
+print(wilc)
+wilc$p.value
+
 
 # p value jest mniejsze niz 0,05 więc hipoteza zerowa jest nieprawdziwa
+
+
+
